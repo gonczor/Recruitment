@@ -37,4 +37,15 @@ public class Output {
 
         PrintStatements.print("Terminating programme.");
     }
+
+    //TODO create an array with company lists
+    public static void showCompanyList(String companyList){
+
+        PrintStatements.print(companyList);
+    }
+
+    public static void showMaterialsAssginedToCOmpany(String materials){
+
+        PrintStatements.print(materials);
+    }
 }

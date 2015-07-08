@@ -9,6 +9,7 @@ public class Input {
     /*
     Calling System.console() in each method is necessary as they are static
      */
+    //TODO refactor System.console()
     private static Console console;
 
 
@@ -25,5 +26,11 @@ public class Input {
         console = System.console();
         String temporary = console.readLine();
         return temporary;
+    }
+
+    public static String readCompanyID(){
+
+        console = System.console();
+        return console.readLine();
     }
 }

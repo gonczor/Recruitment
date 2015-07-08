@@ -15,16 +15,13 @@ public class UserData {
     private int loginAttemptCount;
     private final int MAX_LOGIN_ATTEMPTS = 3;
 
-    Console console;
-
-
-
-    public void Login()
+    public static void login()
             throws IOException, LoginAttemptException{
 
         //TODO
         //refactor code so that it is cleaner
 
+        /*
         Output.OrderUserNameEntry();
         do {
 
@@ -64,6 +61,7 @@ public class UserData {
                 }
             }
         }while (userIsEligibleForEnteringPassword());
+        */
     }
 
     private boolean userNameIsCorrect(String userName){
