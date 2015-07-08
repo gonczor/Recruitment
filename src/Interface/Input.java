@@ -6,11 +6,24 @@ import java.io.IOException;
 
 public class Input {
 
-    public static char[] getPassword()
+    /*
+    Calling System.console() in each method is necessary as they are static
+     */
+    private static Console console;
+
+
+    public static char[] readPasswordFromUser()
             throws IOException{
 
-        Console console = System.console();
+        console = System.console();
+        char[] temporary = console.readPassword();
+        return temporary;
+    }
 
-        return console.readPassword();
+    public static String readUserNameFromUser(){
+
+        console = System.console();
+        String temporary = console.readLine();
+        return temporary;
     }
 }
