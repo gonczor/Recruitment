@@ -8,9 +8,11 @@ public class Main {
 
     public static void main(String[] args){
 
+        UserData userData = new UserData();
+
         try{
 
-            UserData.login();
+            userData.login();
             WebData.handleWebData();
         } catch (MalformedURLException e) {
 

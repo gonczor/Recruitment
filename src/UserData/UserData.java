@@ -15,7 +15,7 @@ public class UserData {
     private int loginAttemptCount;
     private final int MAX_LOGIN_ATTEMPTS = 3;
 
-    public static void login()
+    public void login()
             throws IOException, LoginAttemptException{
 
         //TODO

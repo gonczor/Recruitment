@@ -1,5 +1,7 @@
 package Interface;
 
+import java.util.ArrayList;
+
 public class Output {
 
     public static void OrderUserNameEntry(){
@@ -39,13 +41,15 @@ public class Output {
     }
 
     //TODO create an array with company lists
-    public static void showCompanyList(String companyList){
+    public static void showCompanyList(String name, int ID){
 
-        PrintStatements.print(companyList);
+        PrintStatements.print("Companies with their ID:");
+        PrintStatements.print("ID: " + ID + " name: " + name);
     }
 
-    public static void showMaterialsAssginedToCOmpany(String materials){
+    public static void showMaterialList(String materialName, int id, int companyID){
 
-        PrintStatements.print(materials);
+        PrintStatements.print("Materials available:");
+        PrintStatements.print("Name: " + materialName +" id: " + id + "company ID: " +companyID);
     }
 }
