@@ -2,6 +2,7 @@ package WebService;
 
 import Interface.Input;
 import Interface.Output;
+import UserData.LoginAttemptException;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -38,22 +39,36 @@ public class WebData {
         createCompanyList(rawCompanyList, companies);
         passCompanyListToPrint(companies);
 
-        //TODO only debugging purpose!!!
-        String companyIDToChoose = Input.readCompanyID();
-        //String companyIDToChoose = "1";
+        boolean nextIterationRequired;
 
-        //TODO throw and handle here exception if no such an ID exists
-        String rawMaterialList = getRawMaterialList(companyIDToChoose, basicUrl);
-        createMaterialList(rawMaterialList, materials);
-        passMaterialListToPrint(materials);
+        do {
 
-        //TODO only for debugging purpose!!!
-        String materialID = Input.readMaterialID();
-        //String materialID = "1";
+            nextIterationRequired = false;
 
-        String rawMaterialDetails = getRawMaterialDetails(materialID, basicUrl);
-        createMaterialDetailsStructure(rawMaterialDetails, materialDetails);
-        passMaterialDetailsToPrint(materialDetails);
+            try{
+
+                //TODO only debugging purpose!!!
+                //String companyIDToChoose = Input.readCompanyID();
+                String companyIDToChoose = "1";
+
+                String rawMaterialList = getRawMaterialList(companyIDToChoose, basicUrl);
+                createMaterialList(rawMaterialList, materials);
+                passMaterialListToPrint(materials);
+
+                //TODO only for debugging purpose!!!
+                //String materialID = Input.readMaterialID();
+                String materialID = "1";
+
+                String rawMaterialDetails = getRawMaterialDetails(materialID, basicUrl);
+                createMaterialDetailsStructure(rawMaterialDetails, materialDetails);
+                passMaterialDetailsToPrint(materialDetails);
+            } catch (NoSuchIDException e){
+
+                Output.showNoSuchIDException(e.getMessage());
+                nextIterationRequired = true;
+            }
+
+        }while (nextIterationRequired);
     }
 
     private static String getRawCompanyList(URL url)
@@ -64,11 +79,6 @@ public class WebData {
                 new InputStreamReader(companyListUrl.openStream())
         );
 
-        /*
-        Even though only one line of data is expected,
-        the possibility of reading more in case of the change of
-        data structure is assured here
-         */
         String temporary = "";
         temporary = bufferedReader.readLine();
 
@@ -112,7 +122,11 @@ public class WebData {
     }
 
     private static String getRawMaterialList (String companyID, URL basicURL)
-            throws IOException{
+            throws NoSuchIDException, IOException{
+
+        if(!companyOfGivenIDExists(Integer.parseInt(companyID))){
+            throw new NoSuchIDException();
+        }
 
         String URLEnding = "materialList?companyID=" + companyID;
 
@@ -125,6 +139,17 @@ public class WebData {
 
         bufferedReader.close();
         return temporary;
+    }
+
+    private static boolean companyOfGivenIDExists(int companyID){
+
+        Company company;
+        for(int i = 0; i < companies.size(); i++){
+            company = companies.get(i);
+            if(company.ID == companyID)
+                return true;
+        }
+        return false;
     }
 
     private static void createMaterialList(String rawMaterialList,
@@ -163,7 +188,10 @@ public class WebData {
     }
 
     private static String getRawMaterialDetails(String materialID, URL url)
-            throws IOException{
+            throws IOException, NoSuchIDException{
+
+        if(!materialOfGivenIDExists(Integer.parseInt(materialID)))
+            throw new NoSuchIDException();
 
         String URLEnding = "materialDetails?ID=" + materialID;
 
@@ -176,6 +204,18 @@ public class WebData {
 
         bufferedReader.close();
         return temporary;
+    }
+
+    private static boolean materialOfGivenIDExists(int materialID){
+
+        Material material;
+        for(int i = 0; i < materials.size(); i ++){
+
+            material = materials.get(i);
+            if(material.ID == materialID)
+                return true;
+        }
+        return false;
     }
 
     private static void createMaterialDetailsStructure(String rawMaterialData,

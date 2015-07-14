@@ -17,11 +17,11 @@ public class UserData {
 
     public void login()
             throws IOException, LoginAttemptException{
-
+/*
         //TODO
         //refactor code so that it is cleaner
 
-        
+
         Output.OrderUserNameEntry();
         do {
 
@@ -61,7 +61,7 @@ public class UserData {
                 }
             }
         }while (userIsEligibleForEnteringPassword());
-
+*/
     }
 
     private boolean userNameIsCorrect(String userName){
@@ -120,4 +120,5 @@ public class UserData {
 
         loginAttemptCount++;
     }
+
 }

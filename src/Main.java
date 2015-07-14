@@ -21,7 +21,7 @@ public class Main {
 
             System.err.print(e.getMessage());
         } catch (LoginAttemptException e){
-            
+
             System.err.println(e.getMessage());
         } catch(Exception e){
 

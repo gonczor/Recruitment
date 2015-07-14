@@ -40,7 +40,6 @@ public class Output {
         PrintStatements.print("Terminating programme.");
     }
 
-    //TODO create an array with company lists
     public static void showCompanyList(String name, int ID){
 
         PrintStatements.print("ID: " + ID + " name: " + name);
@@ -54,5 +53,10 @@ public class Output {
     public static void printMaterialDetails(String details){
 
         PrintStatements.print(details);
+    }
+
+    public static void showNoSuchIDException(String error){
+
+        System.err.println(error);
     }
 }
