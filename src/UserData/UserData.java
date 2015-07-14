@@ -21,7 +21,7 @@ public class UserData {
         //TODO
         //refactor code so that it is cleaner
 
-        /*
+        
         Output.OrderUserNameEntry();
         do {
 
@@ -61,7 +61,7 @@ public class UserData {
                 }
             }
         }while (userIsEligibleForEnteringPassword());
-        */
+
     }
 
     private boolean userNameIsCorrect(String userName){

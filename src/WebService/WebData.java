@@ -18,6 +18,7 @@ public class WebData {
     private static URL basicUrl;
     private static ArrayList<Company> companies;
     private static ArrayList<Material> materials;
+    private static MaterialDetails materialDetails;
 
     /*
     Exception thrown from method and not dealt with to
@@ -29,20 +30,30 @@ public class WebData {
 
         companies = new ArrayList<>();
         materials = new ArrayList<>();
+        materialDetails = new MaterialDetails();
 
         basicUrl = new URL("http://193.142.112.220:8337/");
+
         String rawCompanyList = getRawCompanyList(basicUrl);
         createCompanyList(rawCompanyList, companies);
         passCompanyListToPrint(companies);
 
         //TODO only debugging purpose!!!
-        //String companyIDToChoose = Input.readCompanyID();
-        String companyIDToChoose = "1";
+        String companyIDToChoose = Input.readCompanyID();
+        //String companyIDToChoose = "1";
 
         //TODO throw and handle here exception if no such an ID exists
         String rawMaterialList = getRawMaterialList(companyIDToChoose, basicUrl);
         createMaterialList(rawMaterialList, materials);
+        passMaterialListToPrint(materials);
 
+        //TODO only for debugging purpose!!!
+        String materialID = Input.readMaterialID();
+        //String materialID = "1";
+
+        String rawMaterialDetails = getRawMaterialDetails(materialID, basicUrl);
+        createMaterialDetailsStructure(rawMaterialDetails, materialDetails);
+        passMaterialDetailsToPrint(materialDetails);
     }
 
     private static String getRawCompanyList(URL url)
@@ -128,7 +139,6 @@ public class WebData {
         while (matcher.find(startIndex)) {
 
             createNewMaterialListElement(matcher, materialList);
-            System.out.println(matcher.group(1) + ", " + matcher.group(2) +", " + matcher.group(3));
             startIndex = matcher.end();
         }
     }
@@ -151,6 +161,63 @@ public class WebData {
             Output.showMaterialList(material.name, material.ID, material.providingCompanyID);
         }
     }
+
+    private static String getRawMaterialDetails(String materialID, URL url)
+            throws IOException{
+
+        String URLEnding = "materialDetails?ID=" + materialID;
+
+        URL materialDetailsURL = new URL(url, URLEnding);
+        BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(materialDetailsURL.openStream())
+        );
+
+        String temporary =  bufferedReader.readLine();
+
+        bufferedReader.close();
+        return temporary;
+    }
+
+    private static void createMaterialDetailsStructure(String rawMaterialData,
+                                                       MaterialDetails materialDetails){
+
+        int startIndex = 0;
+        String patternToExtract =
+                "\"name\":\"(\\D*)\"," +
+                "\"description\":\"(\\D*)\"," +
+                "\"notes\":\"(\\D*)\"," +
+                "\"supplier\":\"(\\D*)\"," +
+                "\"price\":(\\d*)," +
+                "\"currency\":\"(\\D*)\"," +
+                "\"ID\":(\\d*)";
+
+        Pattern pattern = Pattern.compile(patternToExtract);
+        Matcher matcher = pattern.matcher(rawMaterialData);
+
+        if(matcher.find()){
+
+            materialDetails.name = matcher.group(1);
+            materialDetails.description = matcher.group(2);
+            materialDetails.notes = matcher.group(3);
+            materialDetails.supplier = matcher.group(4);
+            materialDetails.price = Integer.parseInt(matcher.group(5));
+            materialDetails.currency = matcher.group(6);
+            materialDetails.ID = Integer.parseInt(matcher.group(7));
+        }
+    }
+
+    private static void passMaterialDetailsToPrint(MaterialDetails materialDetails){
+
+        //different approach here is used to reduce number of input parameters
+        String stringToPass = "Name: " + materialDetails.name + "\n" +
+                "ID: " + materialDetails.ID +  "\n" +
+                "Description: " + materialDetails.description + "\n" +
+                "Notes: " + materialDetails.notes + "\n" +
+                "Supplier: " + materialDetails.supplier + "\n" +
+                "Price: " + materialDetails.price + " " + materialDetails.currency + "\n";
+
+        Output.printMaterialDetails(stringToPass);
+    }
 }
 
 class Company{
@@ -163,5 +230,16 @@ class Material{
 
     String name;
     int providingCompanyID;
+    int ID;
+}
+
+class MaterialDetails{
+
+    String name;
+    String description;
+    String notes;
+    String supplier;
+    int price;
+    String currency;
     int ID;
 }

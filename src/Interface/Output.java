@@ -43,13 +43,16 @@ public class Output {
     //TODO create an array with company lists
     public static void showCompanyList(String name, int ID){
 
-        PrintStatements.print("Companies with their ID:");
         PrintStatements.print("ID: " + ID + " name: " + name);
     }
 
     public static void showMaterialList(String materialName, int id, int companyID){
 
-        PrintStatements.print("Materials available:");
-        PrintStatements.print("Name: " + materialName +" id: " + id + "company ID: " +companyID);
+        PrintStatements.print("Name: " + materialName +" id: " + id + " company ID: " +companyID);
+    }
+
+    public static void printMaterialDetails(String details){
+
+        PrintStatements.print(details);
     }
 }

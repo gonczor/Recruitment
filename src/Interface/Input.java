@@ -33,4 +33,10 @@ public class Input {
         console = System.console();
         return console.readLine();
     }
+
+    public static String readMaterialID(){
+
+        console = System.console();
+        return console.readLine();
+    }
 }
