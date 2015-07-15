@@ -1,10 +1,7 @@
 package WebService;
 
-import Interface.Input;
 import Interface.Output;
-import UserData.LoginAttemptException;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,53 +18,73 @@ public class WebData {
     private static ArrayList<Material> materials;
     private static MaterialDetails materialDetails;
 
-    /*
-    Exception thrown from method and not dealt with to
-    ensure all exceptions that are not caused by user are dealt with
-    on the same abstraction level.
-    */
-    public static void handleWebData()
-            throws IOException{
+    /**
+     * Allows to create instances of private classes used later.
+     * @throws MalformedURLException
+     */
+    public WebData()
+            throws MalformedURLException{
 
         companies = new ArrayList<>();
         materials = new ArrayList<>();
         materialDetails = new MaterialDetails();
-
         basicUrl = new URL("http://193.142.112.220:8337/");
+    }
+
+    /**
+     * Downloads and processes data about companies for website. A List of Company elements is created.
+     * @throws IOException
+     */
+    public void getCompanyListFromWebsite()
+            throws IOException{
 
         String rawCompanyList = getRawCompanyList(basicUrl);
         createCompanyList(rawCompanyList, companies);
         passCompanyListToPrint(companies);
+    }
+
+    /**
+     * Downloads and processes data about materials from website. A list of Material elements is created
+     * as a result.
+     * @param companyID the ID of the company user wants to check. Programme assures that entering non-existent
+     *                  ID is impossible.
+     * @throws NoSuchIDException
+     * @throws IOException
+     */
+    public void getMaterialListFromWebsite(String companyID)
+            throws NoSuchIDException, IOException{
+
+        String rawMaterialList = getRawMaterialList(companyID, basicUrl);
+        createMaterialList(rawMaterialList, materials);
+        passMaterialListToPrint(materials);
+    }
+
+    /**
+     * Downloads and processes data about single Material from website. A new instance of MaterialDetails
+     * data structure is created as a result.
+     * @param materialID the ID of the material user wants to check. Programme assures that entering non-existent
+     *                  ID is impossible.
+     * @throws NoSuchIDException
+     * @throws IOException
+     */
+    public void getMaterialDetailsListFromWebsite(String materialID)
+            throws NoSuchIDException, IOException{
 
         boolean nextIterationRequired;
 
         do {
 
             nextIterationRequired = false;
-
-            try{
-
-                //TODO only debugging purpose!!!
-                //String companyIDToChoose = Input.readCompanyID();
-                String companyIDToChoose = "1";
-
-                String rawMaterialList = getRawMaterialList(companyIDToChoose, basicUrl);
-                createMaterialList(rawMaterialList, materials);
-                passMaterialListToPrint(materials);
-
-                //TODO only for debugging purpose!!!
-                //String materialID = Input.readMaterialID();
-                String materialID = "1";
+            try {
 
                 String rawMaterialDetails = getRawMaterialDetails(materialID, basicUrl);
                 createMaterialDetailsStructure(rawMaterialDetails, materialDetails);
                 passMaterialDetailsToPrint(materialDetails);
             } catch (NoSuchIDException e){
 
-                Output.showNoSuchIDException(e.getMessage());
+                Output.showExceptionMessage(e.getMessage());
                 nextIterationRequired = true;
             }
-
         }while (nextIterationRequired);
     }
 
@@ -79,11 +96,11 @@ public class WebData {
                 new InputStreamReader(companyListUrl.openStream())
         );
 
-        String temporary = "";
-        temporary = bufferedReader.readLine();
+        String companyList = "";
+        companyList = bufferedReader.readLine();
 
         bufferedReader.close();
-        return temporary;
+        return companyList;
     }
 
     private static void createCompanyList(String rawCompanyList,
@@ -206,7 +223,12 @@ public class WebData {
         return temporary;
     }
 
-    private static boolean materialOfGivenIDExists(int materialID){
+    /**
+     * Checks whether there is a material with the ID entered by user.
+     * @param materialID id that needs checking
+     * @return true, or false depending on whether the ID has been found or not.
+     */
+    public static boolean materialOfGivenIDExists(int materialID){
 
         Material material;
         for(int i = 0; i < materials.size(); i ++){
@@ -260,12 +282,19 @@ public class WebData {
     }
 }
 
+/**
+ * Class containing the name (as a String) and an ID (as an int) of a company.
+ */
 class Company{
 
     String name;
     int ID;
 }
 
+/**
+ * Class containing the name (a a String), ID of the company owning the material (as an int)
+ * and the id of the material itself (as an int).
+ */
 class Material{
 
     String name;
@@ -273,6 +302,18 @@ class Material{
     int ID;
 }
 
+/**
+ * Class containing following information about a material:
+ * <ul>
+ *     <li> name (String)</li>
+ *     <li> description (String)</li>
+ *     <li> notes (String)</li>
+ *     <li> supplier (String)</li>
+ *     <li> price (int)</li>
+ *     <li> currency (String)</li>
+ *     <li> ID (int)</li>
+ * </ul>
+ */
 class MaterialDetails{
 
     String name;

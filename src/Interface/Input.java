@@ -6,13 +6,14 @@ import java.io.IOException;
 
 public class Input {
 
-    /*
-    Calling System.console() in each method is necessary as they are static
-     */
-    //TODO refactor System.console()
+
     private static Console console;
 
-
+    /**
+     * Reads password without echoing it on keyboard.
+     * @return password as char[]
+     * @throws IOException
+     */
     public static char[] readPasswordFromUser()
             throws IOException{
 
@@ -21,6 +22,10 @@ public class Input {
         return temporary;
     }
 
+    /**
+     * Reads login from user
+     * @return login as a String
+     */
     public static String readUserNameFromUser(){
 
         console = System.console();
@@ -28,13 +33,45 @@ public class Input {
         return temporary;
     }
 
+    /**
+     * Reads company ID
+     * @return company ID as a String
+     */
     public static String readCompanyID(){
+
+
+        console = System.console();
+        return console.readLine();
+
+        //return "1";
+    }
+
+    /**
+     * Reads material ID
+     * @return material ID as a String
+     */
+    public static String readMaterialID(){
 
         console = System.console();
         return console.readLine();
     }
 
-    public static String readMaterialID(){
+    /**
+     * Returns y/n depending on the user's decision
+     * @return y/n as a String
+     */
+    public static String userDecision(){
+
+        console = System.console();
+        return console.readLine();
+
+    }
+
+    /**
+     * Returns description of a single detail of a material to be inserted to local database.
+     * @return detail description as a String
+     */
+    public static String getDetail(){
 
         console = System.console();
         return console.readLine();

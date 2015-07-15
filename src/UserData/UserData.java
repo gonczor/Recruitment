@@ -1,28 +1,39 @@
 package UserData;
 
-import java.io.Console;
-import java.io.IOException;
+import java.io.*;
+
 import Interface.Input;
 import Interface.Output;
 
 public class UserData {
 
     //Temporary solution. Target solution will keep encrypted password in separate file.
-    private final String CORRECT_PASSWORD = "pass";
-    private final String USERNAME = "User";
-    private String userName;
-    private char[] password;
-    private int loginAttemptCount;
-    private final int MAX_LOGIN_ATTEMPTS = 3;
+    private static final String CORRECT_PASSWORD = "pass";
+    private static final String USERNAME = "User";
+    private static String userName;
+    private static char[] password;
+    private static int loginAttemptCount;
+    private static final int MAX_LOGIN_ATTEMPTS = 3;
 
-    public void login()
+    /**
+     * Reads user's login and password. The amount of tries while entering login is not limited, while
+     * the amount of tries while entering password is limited to 3 times.
+     * @throws IOException
+     * @throws LoginAttemptException
+     */
+    public static void login()
             throws IOException, LoginAttemptException{
-/*
-        //TODO
-        //refactor code so that it is cleaner
 
+        readUserName();
+        readPassword();
+    }
+
+    private static void readUserName()
+            throws IOException{
 
         Output.OrderUserNameEntry();
+        boolean nextIterationRequired;
+
         do {
 
             userName = Input.readUserNameFromUser();
@@ -30,60 +41,59 @@ public class UserData {
             if(userNameIsCorrect(userName)){
 
                 Output.UserNameCorrectInfo();
+                nextIterationRequired = false;
             }
             else {
 
-                Output.UserNameIncorrectInfo();
+                Output.userNameIncorrectInfo();
+                nextIterationRequired = true;
             }
-        }while (!userNameIsCorrect(userName));
+        }while (nextIterationRequired);
+    }
 
-        Output.OrderPasswordEntry();
+    private static void readPassword()
+            throws LoginAttemptException, IOException{
+
+        Output.orderPasswordEntry();
         setLoginAttemptCount();
+
         do {
 
             password = Input.readPasswordFromUser();
 
-            if(passwordIsOK(password)){
+            if(passwordIsOK(password)) {
 
-                Output.PasswordCorrectInfo();
+                Output.passwordCorrectInfo();
                 return;
             }
-
             else {
 
-                Output.PasswordIncorrectInfo();
+                Output.passwordIncorrectInfo();
                 incrementLoginAttemptCount();
-                //TODO think of a way to improve this part
+
                 if (!userIsEligibleForEnteringPassword()){
 
-                    Output.TerminatingProgrammeInfo();
+                    Output.terminatingProgrammeInfo();
                     throw new LoginAttemptException();
                 }
             }
         }while (userIsEligibleForEnteringPassword());
-*/
     }
 
-    private boolean userNameIsCorrect(String userName){
+    private static boolean userNameIsCorrect(String userName)
+            throws IOException{
 
-        if(userName.equals(getUserNameFromFile()))
+        if(userName.equals(USERNAME))
             return true;
         else
             return false;
     }
 
-    private String getUserNameFromFile(){
-
-        //TODO
-        //implement reading user name from file. this is temporary solution only
-        return USERNAME;
-    }
-
-    public boolean passwordIsOK(char[] enteredPassword)
+    public static boolean passwordIsOK(char[] enteredPassword)
             throws IOException{
 
         String passwordToCheck = convertPasswordToString(enteredPassword);
-        if(passwordToCheck.equals(getPasswordFromFile()))
+        if(passwordToCheck.equals(CORRECT_PASSWORD))
             return true;
         else
             return false;
@@ -94,14 +104,7 @@ public class UserData {
         return new String(enteredPassword);
     }
 
-    private String getPasswordFromFile(){
-
-        //TODO
-        //implement reading password from file
-        return CORRECT_PASSWORD;
-    }
-
-    private boolean userIsEligibleForEnteringPassword(){
+    private static boolean userIsEligibleForEnteringPassword(){
 
         //>= comparison used instead of == to ensure that unexpected change in
         //loginAttemptCount value won't make infinite login attempts possible
@@ -111,12 +114,12 @@ public class UserData {
             return true;
     }
 
-    private void setLoginAttemptCount(){
+    private static void setLoginAttemptCount(){
 
         loginAttemptCount = 0;
     }
 
-    private void incrementLoginAttemptCount(){
+    private static void incrementLoginAttemptCount(){
 
         loginAttemptCount++;
     }
