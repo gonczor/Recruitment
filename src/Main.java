@@ -31,7 +31,6 @@ public class Main {
 
             UserData.login();
             handleData();
-
         } catch (MalformedURLException e) {
 
             Output.showExceptionMessage(e.getMessage());
@@ -98,7 +97,6 @@ public class Main {
                 nextIterationRequired = true;
             }
         }while (nextIterationRequired);
-
     }
 
     private static void handleMaterialData()

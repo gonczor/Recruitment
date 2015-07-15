@@ -1,5 +1,8 @@
 package Interface;
 
+/**
+ * Provides methods same as System.out.println() method. Used only to shorten the process of typing.
+ */
 public class PrintStatements {
 
     public static void print(String s){

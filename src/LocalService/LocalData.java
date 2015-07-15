@@ -9,6 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Provides methods to operate on locally stored data.
+ */
 public class LocalData {
 
     private static String dataDirectoryPath = "LocalMaterialData";
@@ -17,6 +20,11 @@ public class LocalData {
     private File file;
     private File directory;
 
+    /**
+     * Assigns values to variables used later.
+     * @param receivedMaterialID ID of the material to work with
+     * @throws IOException
+     */
     public LocalData(String receivedMaterialID)
             throws IOException{
 
@@ -34,15 +42,26 @@ public class LocalData {
         }
     }
 
-    public static boolean localDataExists(String fileToCheck){
+    /**
+     * Checks whether data has been modified. If no, the programme will download data from website, otherwise,
+     * data from LocalMaterialData directory will be used.
+     * @param materialID the ID of the material to be searched (the name of the file
+     *                   in which data is stored is the same as its ID).
+     * @return true/false depending on whether the file has been found.
+     */
+    public static boolean localDataExists(String materialID){
 
-        File searchedFile = new File(dataDirectoryPath + File.separator + fileToCheck);
+        File searchedFile = new File(dataDirectoryPath + File.separator + materialID);
         if(searchedFile.exists())
             return true;
         else
             return false;
     }
 
+    /**
+     * Reads data from LocalMaterialData directory.
+     * @throws IOException
+     */
     public void getMaterialDetailsFromLocalStorage() throws IOException{
 
         Charset charset = Charset.defaultCharset();
@@ -60,6 +79,10 @@ public class LocalData {
         Output.printMaterialDetails(dataToWrite);
     }
 
+    /**
+     * Allows to write material details to local storage.
+     * @throws IOException
+     */
     public void enterNewMaterialDetails()
             throws IOException{
 

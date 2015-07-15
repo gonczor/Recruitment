@@ -7,7 +7,6 @@ import Interface.Output;
 
 public class UserData {
 
-    //Temporary solution. Target solution will keep encrypted password in separate file.
     private static final String CORRECT_PASSWORD = "pass";
     private static final String USERNAME = "User";
     private static String userName;
@@ -89,7 +88,7 @@ public class UserData {
             return false;
     }
 
-    public static boolean passwordIsOK(char[] enteredPassword)
+    private static boolean passwordIsOK(char[] enteredPassword)
             throws IOException{
 
         String passwordToCheck = convertPasswordToString(enteredPassword);
